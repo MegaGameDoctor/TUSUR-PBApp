@@ -37,7 +37,7 @@ public class LoadingActivity extends Activity {
         database = new ServerDB(this);
         database.open();
 
-        coreManager = new CoreManager("server.pbtusur.ru");
+        coreManager = new CoreManager("-");
 
         if (database.isAccountExist()) {
             Storage.name = database.getName();
