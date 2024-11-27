@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/pixel_timer"
+            android:title="..."
+            app:showAsAction="ifRoom"/>
+    <item
+            android:id="@+id/open_chat"
+            android:icon="@drawable/ic_menu_chat"
+            android:title="@string/chat_menu_title"
+            app:showAsAction="ifRoom"/>
+</menu>

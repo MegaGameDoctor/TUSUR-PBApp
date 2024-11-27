@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#4CAF50</color>
+
+    <color name="black">#000000</color>
+    <color name="eclipse">#404040</color>
+    <color name="grey">#808080</color>
+    <color name="white">#ffffff</color>
+    <color name="red">#ff0000</color>
+    <color name="orange">#ff8000</color>
+    <color name="yellow">#ffff00</color>
+    <color name="lime">#8BC34A</color>
+    <color name="malachite">#246B27</color>
+    <color name="cyan">#00ffff</color>
+    <color name="sapphire">#0040ff</color>
+    <color name="purple">#8000ff</color>
+    <color name="lt_purple">#c000ff</color>
+    <color name="magenta">#FDA7B6</color>
+</resources>

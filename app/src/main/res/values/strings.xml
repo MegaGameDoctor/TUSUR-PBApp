@@ -1,0 +1,27 @@
+<resources>
+    <string name="menu_about">Об авторе</string>
+    <string name="menu_stats">Статистика</string>
+    <string name="menu_auth">Изменить авторизацию</string>
+    <string name="drawer_open">Открыть меню</string>
+    <string name="drawer_close">Закрыть меню</string>
+
+    <string name="app_name">TUSUR PixelBattle</string>
+    <string name="about_version">Версия !ver!</string>
+    <string name="action_about">Об авторе</string>
+
+    <string name="edit_auth">Изменить авторизацию</string>
+    <string name="edit_auth_name">Ник:</string>
+    <string name="edit_auth_name_hint">Example</string>
+    <string name="edit_auth_title">Выберите ник, под которым хотелось бы играть</string>
+
+    <string name="auth_window_title">Авторизация</string>
+    <string name="auth_window_close">Закрыть</string>
+    <string name="auth_window_save">Сохранить</string>
+    <string name="auth_window_change">Изменить</string>
+
+    <string name="chat_title">Онлайн чат</string>
+    <string name="chat_message">Сообщение</string>
+    <string name="chat_menu_title">Открыть чат</string>
+
+    <string name="ok">ОК</string>
+</resources>

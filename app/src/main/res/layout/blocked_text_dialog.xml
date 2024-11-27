@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+    <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:stretchColumns="*">
+
+        <TableRow>
+
+            <TextView
+                    android:id="@+id/blocked_text_dialog_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dip"
+                    android:layout_span="2"
+                    android:textColor="#FF0000"
+                    android:textSize="22sp"
+                    android:maxLines="10"
+
+                    android:scrollbars="vertical"
+                    android:textStyle="bold"/>
+        </TableRow>
+    </TableLayout>
+
+</ScrollView>

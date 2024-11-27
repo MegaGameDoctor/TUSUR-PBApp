@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:padding="10dp">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chat_title"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/primary_text_dark"/>
+
+    <TextView
+            android:id="@+id/chat_list"
+            android:maxLines="16"
+
+            android:layout_marginBottom="6dip"
+            android:layout_width="387dp"
+            android:layout_height="149dp"
+            android:padding="10dp"
+            android:gravity="bottom"
+            android:scrollbars="vertical"
+
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="5dp"/>
+    <EditText
+            android:id="@+id/edit_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/chat_message"
+            android:inputType="textCapSentences"
+            android:importantForAutofill="no">
+
+        <requestFocus/>
+    </EditText>
+
+</LinearLayout>
