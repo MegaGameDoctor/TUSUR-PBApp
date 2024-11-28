@@ -68,14 +68,7 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
                     Storage.nextPixelTime = System.currentTimeMillis() + Integer.parseInt(pixelData[4]) * 1000L + 2000L; // 2 sec тк не успевает
                     activity.getPixelByPosition(Integer.parseInt(pixelData[1]), Integer.parseInt(pixelData[2])).setBackgroundColor(Integer.parseInt(pixelData[3]));
                 } else {
-                    this.activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            SimpleDialog d = new SimpleDialog(activity, data);
-                            d.setTitle("Ошибка");
-                            d.show();
-                        }
-                    });
+                    Storage.nextPixelTime = System.currentTimeMillis() + Integer.parseInt(data) * 1000L + 2000L; // 2 sec тк не успевает
                 }
             } else if (action.equals("chatMessage")) {
                 Storage.chatInfo.add(data);
