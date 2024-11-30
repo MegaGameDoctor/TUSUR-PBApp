@@ -62,6 +62,7 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
                 activity.getPixelByPosition(Integer.parseInt(dd[0]), Integer.parseInt(dd[1])).setBackgroundColor(Integer.parseInt(dd[2]));
             } else if (action.equals("paintPixelAnswer")) {
                 if (data.equals("NO_AUTH")) {
+                    name = null;
                     activity.sendAuthRequest();
                 } else if (data.startsWith("SUCCESS:")) {
                     String[] pixelData = data.split(":");
