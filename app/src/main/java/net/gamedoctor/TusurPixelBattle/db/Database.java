@@ -16,8 +16,8 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
 
         database.execSQL("CREATE TABLE account_info ("
-                + "name TEXT"
-                //+ "password TEXT"
+                + "name TEXT,"
+                + "password TEXT"
                 + ");");
     }
 

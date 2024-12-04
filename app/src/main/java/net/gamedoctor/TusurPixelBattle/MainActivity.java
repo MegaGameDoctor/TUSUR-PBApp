@@ -36,10 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendAuthRequest() {
         View promptsView = LayoutInflater.from(this).inflate(
-                R.layout.set_name, null);
+                R.layout.auth, null);
 
         final EditText nameColumn = promptsView
                 .findViewById(R.id.edit_name);
+
+        final EditText passwordColumn = promptsView
+                .findViewById(R.id.edit_password);
 
         final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                 .setTitle(getResources().getString(R.string.auth_window_title))
@@ -52,13 +55,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String nameStr = nameColumn.getText().toString();
+                String passwordStr = passwordColumn.getText().toString();
                 if (name == null) {
-                    if (nameStr.equals("") || nameStr.startsWith(" ") || nameStr.length() < 3) {
+                    if (nameStr.equals("") || nameStr.startsWith(" ") || nameStr.length() < 3 || passwordStr.equals("") || passwordStr.startsWith(" ") || passwordStr.length() < 3) {
                         Toast.makeText(MainActivity.this, "Информация не сохранена", Toast.LENGTH_SHORT).show();
                     } else {
-                        database.createAccountData(nameStr);
-                        Storage.name = nameStr;
-                        coreManager.requestAllPixels();
+                        database.createAccountData(nameStr, passwordStr);
+                        coreManager.tryAuth(nameStr, passwordStr);
                         Toast.makeText(MainActivity.this, "Информация сохранена", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -177,27 +180,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        /*
-        DrawerMenuItem drawerExport = new DrawerMenuItem(R.drawable.ic_menu_export, R.string.menu_export) {
-            @Override
-            public void execute() {
-                String filename;
-
-                Calendar calendar = Calendar.getInstance();
-
-                long unixTime = System.currentTimeMillis() / 1000;
-                unixTime %= 1000000;
-
-                filename = "KRPB_IMG_"
-                        + calendar.get(Calendar.YEAR)
-                        + calendar.get(Calendar.MONTH)
-                        + calendar.get(Calendar.DAY_OF_MONTH) + "_" + unixTime + ".jpg";
-
-                screenShot(findViewById(R.id.paper_linear_layout), filename);
-            }
-        };
-
-         */
 
         DrawerMenuItem drawerAbout = new DrawerMenuItem(R.drawable.ic_menu_about, R.string.menu_about) {
             @Override
@@ -208,60 +190,49 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        DrawerMenuItem drawerChangeAuth = new DrawerMenuItem(R.drawable.ic_menu_auth, R.string.menu_auth) {
+        DrawerMenuItem drawerExit = new DrawerMenuItem(R.drawable.ic_menu_auth, R.string.menu_exit) {
             @Override
             public void execute() {
-                View promptsView = LayoutInflater.from(MainActivity.this).inflate(
-                        R.layout.set_name, null);
+                if (name != null && hashedPassword != null) {
+                    View promptsView = LayoutInflater.from(MainActivity.this).inflate(
+                            R.layout.auth_exit, null);
 
-                final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(MainActivity.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_DARK)
-                        .setTitle(getResources().getString(R.string.auth_window_title))
-                        .setView(promptsView)
-                        .setPositiveButton(getResources().getString(R.string.auth_window_change), null)
-                        .setNegativeButton(getResources().getString(R.string.auth_window_close), null)
-                        .show();
+                    final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(MainActivity.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                            .setTitle(getResources().getString(R.string.auth_exit_title))
+                            .setView(promptsView)
+                            .setPositiveButton(getResources().getString(R.string.auth_exit_no), null)
+                            .setNegativeButton(getResources().getString(R.string.auth_exit_yes), null)
+                            .show();
 
-                final EditText nameColumn = promptsView
-                        .findViewById(R.id.edit_name);
-                if (name != null)
-                    nameColumn.setText(Storage.name);
-
-
-                Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                positiveButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String nameStr = nameColumn.getText().toString();
-                        if (nameStr.equals("") || nameStr.startsWith(" ") || nameStr.length() < 3) {
-                            Toast.makeText(MainActivity.this, "Информация не обновлена: '" + nameStr + "'", Toast.LENGTH_SHORT).show();
-                        } else {
-                            coreManager.tryAuth(nameStr);
-                            Toast.makeText(MainActivity.this, "Информация обновлена", Toast.LENGTH_SHORT).show();
+                    Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    negativeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            database.deleteAccountData(name);
+                            name = null;
+                            hashedPassword = null;
+                            Toast.makeText(MainActivity.this, "Вы успешно вышли из аккаунта", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
-                    }
-                });
-
-                Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-                negativeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
+                    });
+                } else {
+                    sendAuthRequest();
+                }
             }
         };
 
         DrawerMenuItem drawerStats = new DrawerMenuItem(R.drawable.ic_menu_stats, R.string.menu_stats) {
             @Override
             public void execute() {
-                // getResources().getString(R.string.action_privacy)
-                coreManager.requestStats();
+                if (name != null && hashedPassword != null) {
+                    coreManager.requestStats();
+                } else {
+                    sendAuthRequest();
+                }
             }
         };
 
-        //listMenuItem.add(drawerExport);
-        listMenuItem.add(drawerChangeAuth);
+        listMenuItem.add(drawerExit);
         listMenuItem.add(drawerAbout);
         listMenuItem.add(drawerStats);
     }

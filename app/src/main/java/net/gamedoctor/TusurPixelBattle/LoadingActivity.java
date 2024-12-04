@@ -7,8 +7,7 @@ import android.os.Bundle;
 import net.gamedoctor.TusurPixelBattle.core.CoreManager;
 import net.gamedoctor.TusurPixelBattle.db.ServerDB;
 
-import static net.gamedoctor.TusurPixelBattle.Storage.coreManager;
-import static net.gamedoctor.TusurPixelBattle.Storage.database;
+import static net.gamedoctor.TusurPixelBattle.Storage.*;
 
 public class LoadingActivity extends Activity {
 
@@ -41,8 +40,11 @@ public class LoadingActivity extends Activity {
 
         if (database.isAccountExist()) {
             Storage.name = database.getName();
+            hashedPassword = database.getPassword();
+            System.out.println(hashedPassword + "@" + name);
         } else {
             Storage.name = null;
+            hashedPassword = null;
         }
 
         coreManager.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

@@ -23,7 +23,7 @@ public class ServerDB {
         dbHelper.close();
     }
 
-    public void createAccountData(String name) {
+    public void createAccountData(String name, String password) {
         boolean exist = false;
         Cursor cursor = database.rawQuery("SELECT * FROM " + tableName + " WHERE name = '" + name + "'", null);
 
@@ -39,6 +39,7 @@ public class ServerDB {
         if (!exist) {
             ContentValues values = new ContentValues();
             values.put("name", name);
+            values.put("password", password);
             database.insert(tableName, null, values);
         }
     }
@@ -48,10 +49,10 @@ public class ServerDB {
                 new String[]{name});
     }
 
-    public void updateAccountData(String name) {
+    public void updateAccountData(String name, String password) {
         try {
             deleteAccountData(name);
-            createAccountData(name);
+            createAccountData(name, password);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,6 +81,21 @@ public class ServerDB {
         while (!cursor.isAfterLast()) {
             if (cursor.getString(0) != null) {
                 result = cursor.getString(0);
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return result;
+    }
+
+    public String getPassword() {
+        String result = null;
+        Cursor cursor = database.rawQuery("SELECT * FROM " + tableName, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            if (cursor.getString(1) != null) {
+                result = cursor.getString(1);
             }
             cursor.moveToNext();
         }

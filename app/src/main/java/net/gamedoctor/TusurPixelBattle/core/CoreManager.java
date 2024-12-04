@@ -11,6 +11,9 @@ import net.gamedoctor.TusurPixelBattle.MainActivity;
 import net.gamedoctor.TusurPixelBattle.Storage;
 import net.gamedoctor.TusurPixelBattle.dialogs.SimpleDialog;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +66,12 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
             } else if (action.equals("paintPixelAnswer")) {
                 if (data.equals("NO_AUTH")) {
                     name = null;
-                    activity.sendAuthRequest();
+                    this.activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            activity.sendAuthRequest();
+                        }
+                    });
                 } else if (data.startsWith("SUCCESS:")) {
                     String[] pixelData = data.split(":");
                     Storage.nextPixelTime = System.currentTimeMillis() + Integer.parseInt(pixelData[4]) * 1000L + 2000L; // 2 sec тк не успевает
@@ -99,9 +107,10 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
             } else if (action.equals("authAnswer")) {
                 activity.removeLoading();
                 if (data.startsWith("SUCCESS:")) {
-                    String nameStr = data.replaceFirst("SUCCESS:", "");
-                    database.updateAccountData(nameStr);
-                    Storage.name = nameStr;
+                    String[] dd = data.replaceFirst("SUCCESS:", "").split("@!@");
+                    database.updateAccountData(dd[0], dd[1]);
+                    Storage.name = dd[0];
+                    Storage.hashedPassword = dd[1];
 
                     requestAllPixels();
                 } else {
@@ -125,7 +134,7 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
         if (Storage.name != null) {
             CoreMessage msg = new CoreMessage();
             msg.setAction("paintPixel");
-            msg.setData(Storage.name + "@!@" + x + "@!@" + y + "@!@" + color);
+            msg.setData(Storage.name + "@!@" + hashedPassword + "@!@" + x + "@!@" + y + "@!@" + color);
             send(msg);
         }
     }
@@ -134,7 +143,7 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
         if (Storage.name != null) {
             CoreMessage msg = new CoreMessage();
             msg.setAction("sendChatMessage");
-            msg.setData(Storage.name + "@!@" + message);
+            msg.setData(Storage.name + "@!@" + hashedPassword + "@!@" + message);
             send(msg);
         }
     }
@@ -148,11 +157,11 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
         }
     }
 
-    public void tryAuth(String name) {
+    public void tryAuth(String name, String password) {
         activity.displayLoading("Авторизация...");
         CoreMessage msg = new CoreMessage();
         msg.setAction("tryAuth");
-        msg.setData(name);
+        msg.setData(name + "@!@" + toMD5Hash(password));
         send(msg);
     }
 
@@ -161,8 +170,26 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
             activity.displayLoading("Получение данных...");
             CoreMessage msg = new CoreMessage();
             msg.setAction("getStats");
-            msg.setData(Storage.name);
+            msg.setData(Storage.name + "@!@" + hashedPassword);
             send(msg);
+        }
+    }
+
+    public String toMD5Hash(String text) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            byte[] messageDigest = md.digest(text.getBytes());
+
+            BigInteger no = new BigInteger(1, messageDigest);
+
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 

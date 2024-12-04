@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 public class Storage {
     public static String name;
+    public static String hashedPassword;
     public static CoreManager coreManager;
     public static ServerDB database;
     public static Handler hh;
