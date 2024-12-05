@@ -2,6 +2,7 @@ package net.gamedoctor.TusurPixelBattle.core;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.mayakplay.aclf.cloud.infrastructure.NettyGatewayClient;
 import com.mayakplay.aclf.cloud.stereotype.Nugget;
@@ -45,12 +46,21 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
             String data = map.get("data");
             if (action.equals("loadAllPixelsAnswer")) {
                 String[] pixels = data.split("!!!");
-                for (String pixel : pixels) {
-                    String[] pixelData = pixel.split("@");
+                for (String pixelStr : pixels) {
+                    String[] pixelData = pixelStr.split("@");
                     int x = Integer.parseInt(pixelData[0]);
                     int y = Integer.parseInt(pixelData[1]);
                     int color = Integer.parseInt(pixelData[2]);
-                    activity.getPixelByPosition(x, y).setBackgroundColor(color);
+                    boolean paintedByPlayer = Boolean.parseBoolean(pixelData[3]);
+
+                    TextView pixel = (TextView) activity.getPixelByPosition(x, y);
+                    pixel.setBackgroundColor(color);
+
+                    if (!paintedByPlayer) {
+                        pixel.setText("B");
+                    } else {
+                        pixel.setText("");
+                    }
                 }
 
                 this.activity.runOnUiThread(new Runnable() {
@@ -62,7 +72,15 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
                 });
             } else if (action.equals("updatePixel")) {
                 String[] dd = data.split("@");
-                activity.getPixelByPosition(Integer.parseInt(dd[0]), Integer.parseInt(dd[1])).setBackgroundColor(Integer.parseInt(dd[2]));
+                boolean paintedByPlayer = Boolean.parseBoolean(dd[4]);
+                TextView pixel = (TextView) activity.getPixelByPosition(Integer.parseInt(dd[0]), Integer.parseInt(dd[1]));
+                pixel.setBackgroundColor(Integer.parseInt(dd[2]));
+
+                if (!paintedByPlayer) {
+                    pixel.setText("B");
+                } else {
+                    pixel.setText("");
+                }
             } else if (action.equals("paintPixelAnswer")) {
                 if (data.equals("NO_AUTH")) {
                     name = null;
