@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +21,6 @@ import net.gamedoctor.TusurPixelBattle.dialogs.AboutDialog;
 import net.gamedoctor.TusurPixelBattle.dialogs.BlockedMessageDialog;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import static net.gamedoctor.TusurPixelBattle.Storage.*;
 
@@ -436,8 +434,7 @@ public class MainActivity extends AppCompatActivity {
                 View pixel = l.getChildAt(j);
 
                 pixel.setOnLongClickListener(view -> {
-                    selectColor(((ColorDrawable) view.getBackground()).getColor());
-                    Toast.makeText(MainActivity.this, "Выбран цвет с зажатого пикселя", Toast.LENGTH_SHORT).show();
+                    coreManager.requestPixelInfo(pixelsX.get(view), pixelsY.get(view));
                     return false;
                 });
             }
@@ -523,12 +520,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String secondsToFormatedString(long millis) {
-        return String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
-                TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-    }
-
     Runnable pixel_timer_updater = new Runnable() {
         @Override
         public void run() {
@@ -537,7 +528,7 @@ public class MainActivity extends AppCompatActivity {
                 if (System.currentTimeMillis() > nextPixelTime) {
                     resultLogo = "✅";
                 } else {
-                    resultLogo = secondsToFormatedString(nextPixelTime - System.currentTimeMillis());
+                    resultLogo = coreManager.secondsToFormatedString(nextPixelTime - System.currentTimeMillis());
                 }
 
                 pixel_timer.setTitle(resultLogo);
