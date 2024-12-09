@@ -12,9 +12,6 @@ import net.gamedoctor.TusurPixelBattle.MainActivity;
 import net.gamedoctor.TusurPixelBattle.Storage;
 import net.gamedoctor.TusurPixelBattle.dialogs.SimpleDialog;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -192,7 +189,7 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
         activity.displayLoading("Авторизация...");
         CoreMessage msg = new CoreMessage();
         msg.setAction("tryAuth");
-        msg.setData(name + "@!@" + toMD5Hash(password));
+        msg.setData(name + "@!@" + password);
         send(msg);
     }
 
@@ -216,24 +213,6 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
         }
     }
 
-    public String toMD5Hash(String text) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-
-            byte[] messageDigest = md.digest(text.getBytes());
-
-            BigInteger no = new BigInteger(1, messageDigest);
-
-            String hashtext = no.toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public String secondsToFormatedString(long millis) {
         return String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
@@ -249,7 +228,6 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
         if (seconds == 0) seconds = 1;
 
         StringBuilder sb = new StringBuilder();
-        String prefix = "settings.timeStringFormat.";
         if (days != 0) {
             sb.append(days).append(" ").append("дн.");
         } else if (hours != 0) {
