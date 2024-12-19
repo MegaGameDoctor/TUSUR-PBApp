@@ -17,4 +17,15 @@
     <TextView style="@style/Pixel"/>
     <TextView style="@style/Pixel"/>
 
+    <TextView style="@style/Pixel"/>
+    <TextView style="@style/Pixel"/>
+    <TextView style="@style/Pixel"/>
+    <TextView style="@style/Pixel"/>
+    <TextView style="@style/Pixel"/>
+    <TextView style="@style/Pixel"/>
+    <TextView style="@style/Pixel"/>
+    <TextView style="@style/Pixel"/>
+    <TextView style="@style/Pixel"/>
+    <TextView style="@style/Pixel"/>
+
 </LinearLayout>

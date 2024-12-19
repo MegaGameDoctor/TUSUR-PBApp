@@ -41,7 +41,6 @@ public class LoadingActivity extends Activity {
         if (database.isAccountExist()) {
             Storage.name = database.getName();
             hashedPassword = database.getPassword();
-            System.out.println(hashedPassword + "@" + name);
         } else {
             Storage.name = null;
             hashedPassword = null;
