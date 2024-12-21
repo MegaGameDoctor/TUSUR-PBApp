@@ -89,11 +89,21 @@ public class CoreManager extends AsyncTask<String, String, CoreManager> {
                         }
                     });
                 } else if (data.startsWith("SUCCESS:")) {
-                    String[] pixelData = data.split(":");
-                    Storage.nextPixelTime = System.currentTimeMillis() + Integer.parseInt(pixelData[4]) * 1000L + 2000L; // 2 sec тк не успевает
-                    activity.getPixelByPosition(Integer.parseInt(pixelData[1]), Integer.parseInt(pixelData[2])).setBackgroundColor(Integer.parseInt(pixelData[3]));
+                    String[] paintData = data.split(":");
+                    Storage.nextPixelTime = System.currentTimeMillis() + Integer.parseInt(paintData[4]) * 1000L + 2000L; // 2 sec тк не успевает
+                    activity.getPixelByPosition(Integer.parseInt(paintData[1]), Integer.parseInt(paintData[2])).setBackgroundColor(Integer.parseInt(paintData[3]));
+                } else if (data.startsWith("NO:")) {
+                    Storage.nextPixelTime = System.currentTimeMillis() + Integer.parseInt(data.split(":")[1]) * 1000L + 2000L; // 2 sec тк не успевает
                 } else {
-                    Storage.nextPixelTime = System.currentTimeMillis() + Integer.parseInt(data) * 1000L + 2000L; // 2 sec тк не успевает
+                    this.activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            activity.removeLoading();
+                            SimpleDialog answer = new SimpleDialog(activity, data);
+                            answer.setTitle("Ошибка");
+                            answer.show();
+                        }
+                    });
                 }
             } else if (action.equals("chatMessage")) {
                 Storage.chatInfo.add(data);
